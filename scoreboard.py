@@ -26,7 +26,13 @@ class Scoreboard():
 
     def prep_score(self):
         print("score" )
+
         rounded_score = int(round(self.stats.score, -1))
+        if rounded_score != 666 or rounded_score != 0:
+            settings.Settings.finalscore = rounded_score
+            print("rounded: " + str(rounded_score))
+            print("round final: " + str(settings.Settings.finalscore))
+
         score_str = "{:,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color,
             self.ai_settings.bg_color)

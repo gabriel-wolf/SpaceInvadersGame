@@ -3,6 +3,8 @@ from time import sleep
 
 import pygame
 
+# import scoreboardwindow
+from button import Button
 from bullet import Bullet
 import alien
 from alien import Alien
@@ -112,7 +114,22 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets,
 
     # Draw the play button if the game is inactive.
     if not stats.game_active:
-        play_button.draw_button()
+        if stats.score <= 0 or stats.score == None:
+            print("if not stats game active")
+            play_button.draw_button()
+        elif stats.ships_left <= 0:
+            ai_settings.finalscore = stats.score
+            print('game over')
+            sleep(1)
+            play_button.draw_button_gameover()
+            sleep(3)
+            import scoreboardwindow
+            scoreboardwindow()
+            #scoreboardwindow.startScoreboard
+
+        else:
+            print("if not stats game active")
+            play_button.draw_button()
 
     # Make the most recently drawn screen visible.
     pygame.display.flip()
@@ -131,6 +148,7 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets, mother
 
 def check_high_score(stats, sb):
     if stats.score > stats.high_score:
+        print("check high score: " + str(stats.score))
         None
 
 
@@ -179,8 +197,9 @@ def change_fleet_direction(ai_settings, aliens):
 def change_mothership_direction(ai_settings, mothership):
     ai_settings.mothership_direction *= -1
 
-def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
+def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets, mothership):
     if stats.ships_left > 0:
+        print("ships die but not all")
         # Decrement ships_left.
         stats.ships_left -= 1
 
@@ -189,6 +208,7 @@ def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
         sb.preb_lives(stats)
 
     else:
+        print("else ships hit")
         stats.game_active = False
         pygame.mouse.set_visible(True)
 
@@ -197,32 +217,32 @@ def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     bullets.empty()
 
     # Create a new fleet, and center the ship.
-    # create_fleet(ai_settings, screen, ship, aliens)
+    create_fleet(ai_settings, screen, ship, aliens)
     ship.center_ship()
-    Mothership.center_ship()
+    mothership.center_ship()
 
     # Pause.
     sleep(0.5)
 
 def check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens,
-        bullets):
+        bullets, mothership):
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # Treat this the same as if the ship got hit.
-            ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
+            ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets, mothership)
             break
 
-def update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets):
+def update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets, mothership):
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
 
     # Look for alien-ship collisions.
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
+        ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets, mothership)
 
     # Look for aliens hitting the bottom of the screen.
-    check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets, mothership)
 
 def get_number_aliens_x(ai_settings, alien_width):
     available_space_x = ai_settings.screen_width - 2 * alien_width

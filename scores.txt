@@ -1,3 +1,5 @@
 Gabe:145
 John:132
 Mary:133
+Wan:200
+Sue:50

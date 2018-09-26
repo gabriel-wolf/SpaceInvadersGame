@@ -14,15 +14,18 @@ class Settings():
             pygame.display.set_caption("Space Invaders")
         readalineImageSettings.close()
 
-        # readscores = open("scores.txt", mode='r+')
-        # readscoreslines = readscores.readlines()
-        # print(readscoreslines)
-        # playerlist = []
-        # scorelist = []
-        # for i in readscoreslines:
-        #     playerlist.append(readimageLines[i].spl'
-
         self.rapidfire = False
+        try:
+            if self.finalscore == None:
+                print("SETTING FINAL SCORE")
+                self.finalscore = 666
+            else:
+                print("not setting score because already set")
+        except AttributeError as error:
+            print("att error set")
+        except Exception as exception:
+            print("except error set")
+
 
         self.playerlist = []
         self.scorelist = []
@@ -30,6 +33,7 @@ class Settings():
         with open('scores.txt') as f:
             for line in f:
                 currplayer, currscore = line.strip().split(':')
+                print(type(currscore))
                 self.playerscores[currplayer] = currscore
                 self.scorelist.append(currscore)
                 self.playerlist.append(currplayer)
@@ -41,7 +45,7 @@ class Settings():
         self.bg_color = (0, 0, 0)
 
         # Ship settings.
-        self.ship_limit = 3
+        self.ship_limit = 1 ####3
 
         # Bullet settings.
         self.bullet_width = 2.5 #int((3 / 1.5))
@@ -84,7 +88,7 @@ class Settings():
             self.bullet_speed_factor = 15
         else:
             self.bullet_speed_factor = 5
-        self.alien_speed_factor = 0.75
+        self.alien_speed_factor = 10 ######0.75
         self.mothership_speed_factor = 0.5
 
         # Scoring.
@@ -97,6 +101,6 @@ class Settings():
     def increase_speed(self):
         self.ship_speed_factor *= self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale
-        self.alien_speed_factor *= self.speedup_scale
+        self.alien_speed_factor *= self.speedup_scale * 1.2
 
         self.alien_points = int(self.alien_points * self.score_scale)
