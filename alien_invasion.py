@@ -5,6 +5,7 @@ from settings import Settings
 from game_stats import GameStats
 from scoreboard import Scoreboard
 from button import Button
+from enemybullet import EnemyBullet
 from ship import Ship
 from mothership import Mothership
 import game_functions as gf
@@ -19,8 +20,6 @@ def run_game():
     # play button
     play_button = Button(ai_settings, screen, "Play")
 
-
-
     # stats
     stats = GameStats(ai_settings)
     sb = Scoreboard(ai_settings, screen, stats)
@@ -31,6 +30,7 @@ def run_game():
     ship = Ship(ai_settings, screen)
     mothership = Mothership(ai_settings, screen)
     bullets = Group()
+    enemybullets = Group()
     aliens = Group()
 
 
@@ -41,18 +41,20 @@ def run_game():
     # mainloop
     while True:
         gf.check_events(ai_settings, screen, stats, sb, play_button, ship,
-            aliens, bullets, mothership)
+            aliens, bullets, mothership, enemybullets)
 
         if stats.game_active:
             ship.update()
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens,
                 bullets, mothership)
+            gf.update_enemybullets(ai_settings, screen, stats, sb, ship, aliens,
+                enemybullets, mothership)
             gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens,
                 bullets, mothership)
             gf.update_mothership(ai_settings, screen, stats, sb, ship, aliens,
                 bullets, mothership)
 
         gf.update_screen(ai_settings, screen, stats, sb, ship, aliens,
-            bullets, play_button, mothership)
+            bullets, play_button, mothership, enemybullets)
 
 run_game()

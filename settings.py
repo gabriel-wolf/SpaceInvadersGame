@@ -14,6 +14,8 @@ class Settings():
             pygame.display.set_caption("Space Invaders")
         readalineImageSettings.close()
 
+
+        self.allowcheats = False
         self.rapidfire = False
         try:
             if self.finalscore == None:
@@ -45,7 +47,7 @@ class Settings():
         self.bg_color = (0, 0, 0)
 
         # Ship settings.
-        self.ship_limit = 1 ####3
+        self.ship_limit = 3
 
         # Bullet settings.
         self.bullet_width = 2.5 #int((3 / 1.5))
@@ -56,9 +58,15 @@ class Settings():
         else:
             self.bullets_allowed = 3
 
+        # Bullet settings.
+        self.enemybullet_width = 2.5 #int((3 / 1.5))
+        self.enemybullet_height = 10 #int(15 /1.5)
+        self.enemybullet_color = 255, 0, 0
 
         # Alien settings.
         self.fleet_drop_speed = 8
+
+        self.enemybulletfirerate = 1000
 
         # How quickly the game speeds up.
         self.speedup_scale = 1.1
@@ -77,18 +85,27 @@ class Settings():
         else:
             self.bullet_speed_factor = 5
 
+
+    def setenemybulletsettings(self):
+        self.enemybullets_allowed = self.enemybullets_allowed
+        self.enemybullet_speed_factor = self.enemybullet_speed_factor
+
+
     def initialize_dynamic_settings(self):
         if self.rapidfire == True:
             self.bullets_allowed = 10
         else:
             self.bullets_allowed = 3
 
+        self.enemybullets_allowed = 4
+        self.enemybullet_speed_factor = 2.25
+
         self.ship_speed_factor = 2.4
         if self.rapidfire == True:
             self.bullet_speed_factor = 15
         else:
             self.bullet_speed_factor = 5
-        self.alien_speed_factor = 10 ######0.75
+        self.alien_speed_factor = 0.75
         self.mothership_speed_factor = 0.5
 
         # Scoring.
@@ -99,8 +116,10 @@ class Settings():
         self.mothership_direction = 1
 
     def increase_speed(self):
+        self.enemybulletfirerate = self.enemybulletfirerate * 0.75
         self.ship_speed_factor *= self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale
+        self.enemybullet_speed_factor *= self.speedup_scale
         self.alien_speed_factor *= self.speedup_scale * 1.2
 
         self.alien_points = int(self.alien_points * self.score_scale)

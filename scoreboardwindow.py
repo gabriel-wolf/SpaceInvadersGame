@@ -46,18 +46,37 @@ def startScoreboard():
                         global playerscore
                         playerscore = str(ai_settings.finalscore)
                         print(playerscore)
-                        with open('scores.txt', 'a') as writenewscore:
-                            writenewscore.write(playername + ":" + playerscore)
 
-                        ai_settings.playerscores[str(playername)] = str(playerscore)
-                        print(ai_settings.scorelist)
-                        print(ai_settings.playerlist)
-                        print(type(playerscore))
-                        ai_settings.scorelist.append(playerscore)
-                        ai_settings.playerlist.append(playername)
+                        if playername in ai_settings.playerlist:
+                            global dupindex
+                            dupindex = ai_settings.playerlist.index(playername)
+                            print("playername: " + str(playername) + " in list: " + str(ai_settings.playerlist[dupindex]))
+                            if stats.intscorelist[dupindex] <= int(playerscore):
+                                print("great or equal")
+                                del stats.intscorelist[dupindex]
+                                ai_settings.playerlist.remove(playername)
+                                playerscore = str(playerscore) + "\n"
+                                with open('scores.txt', 'a') as writenewscore:
+                                    writenewscore.write(playername + ":" + playerscore)
+                                ai_settings.playerscores[str(playername)] = str(playerscore)
+                                playerscore = int(ai_settings.finalscore)
+                                print(stats.intscorelist)
+                                print(ai_settings.playerlist)
+                                print(type(playerscore))
+                                stats.intscorelist.append(playerscore)
+                                ai_settings.playerlist.append(playername)
+                            elif stats.intscorelist[dupindex] > int(playerscore):
+                                print("less than")
+                                playerscore = stats.intscorelist[dupindex]
+                                print(stats.intscorelist)
+                                print(ai_settings.playerlist)
+                                print(type(playerscore))
+
+
+
                         global intscorelist
-                        intscorelist = [int(s) for s in ai_settings.scorelist]
-                        print(ai_settings.scorelist)
+                        intscorelist = [int(s) for s in stats.intscorelist]
+                        print(stats.intscorelist)
                         print(intscorelist)
                         global highscore
                         global highplayer
@@ -147,11 +166,59 @@ def openboard():
 
     #intscorelist, ai_settings.playerlist = zip(*sorted(zip(intscorelist, ai_settings.playerlist)))
     intscorelist, ai_settings.playerlist = (list(t) for t in zip(*sorted(zip(intscorelist, ai_settings.playerlist))))
-
+    print("non reversed: ")
+    print(*intscorelist, sep=', ')
+    print("non reversed: ")
+    print(*ai_settings.playerlist, sep=', ')
     intscorelist.reverse()
     ai_settings.playerlist.reverse()
+    print(" reversed: ")
+    print(*intscorelist, sep=', ')
+    print(" reversed: ")
+    print(*ai_settings.playerlist, sep=', ')
+
+    # global final_player_list
+    # final_player_list = []
+    # global final_score_list
+    # final_score_list = []
+    # global duplicate_index
+    # global new_index
+    # for num in ai_settings.playerlist:
+    #     duplicate_index = ai_settings.playerlist.index(num)
+    #     if num not in final_player_list:
+    #         final_player_list.append(num)
+    #         final_score_list.append(intscorelist[duplicate_index])
+    #         new_index = final_player_list.index(num)
+    #         ai_settings.playerlist.remove(num)
+    #         del intscorelist[duplicate_index]
+    #
+    #         while True:
+    #             if num in ai_settings.playerlist:
+    #                 if int(final_score_list[new_index]) > int(intscorelist[duplicate_index]):
+    #                     ai_settings.playerlist.remove(num)
+    #                     del intscorelist[duplicate_index]
+    #                 elif int(final_score_list[new_index]) == int(intscorelist[duplicate_index]):
+    #                     ai_settings.playerlist.remove(num)
+    #                     del intscorelist[duplicate_index]
+    #                 elif int(final_score_list[new_index]) < int(intscorelist[duplicate_index]):
+    #                     final_player_list.remove(num)
+    #                     del final_score_list[new_index]
+    #                     final_player_list.append(num)
+    #                     final_score_list.append(intscorelist[duplicate_index])
+    #                     ai_settings.playerlist.remove(num)
+    #                     del intscorelist[duplicate_index]
+    #             else:
+    #                 break
+    #
+    # print("final lists: ")
+    # print(*final_player_list,sep=', ')
+    # print(*final_score_list,sep=', ')
+    #
+
 
     for z in range(len(intscorelist)):
+        print("z: " + str(z))
+        print("ai_settings.playerscores: " + str(ai_settings.playerscores))
         ai_settings.playerscores[ai_settings.playerlist[z]] = intscorelist[z]
 
     print(ai_settings.playerscores)

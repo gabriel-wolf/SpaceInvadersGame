@@ -40,7 +40,7 @@ class Scoreboard():
         # Display the score at the top right of the screen.
         self.score_rect = self.score_image.get_rect()
         self.score_rect.right = self.screen_rect.right - 10
-        self.score_rect.top = 20
+        self.score_rect.top = self.score_rect.top + self.score_rect.height - 15
 
     def preb_lives(self, stats):
         print("lives")
@@ -54,7 +54,7 @@ class Scoreboard():
         # self.lives_str_rect.right = self.screen_rect.right - 10
         # self.lives_str_rect.top = 20
         self.lives_str_rect.x = 10 + 0 * self.lives_str_rect.width
-        self.lives_str_rect.y = self.screen_rect.top + 15
+        self.lives_str_rect.y = self.screen_rect.top + 12
         # self.lives_str_rect.x = self.screen_rect.left + self.lives_str_rect.width
         # self.lives_str_rect.y = self.screen_rect.bottom + self.lives_str_rect.height
 
@@ -68,7 +68,7 @@ class Scoreboard():
         # Center the high score at the top of the screen.
         self.high_score_rect = self.high_score_image.get_rect()
         self.high_score_rect.centerx = self.screen_rect.centerx
-        self.high_score_rect.top = self.score_rect.top
+        self.high_score_rect.top = self.high_score_rect.top + self.high_score_rect.height - 12
 
     def prep_level(self):
         self.level_image = self.font.render(str(self.stats.level), True,
@@ -77,13 +77,13 @@ class Scoreboard():
         # Position the level below the score.
         self.level_rect = self.level_image.get_rect()
         self.level_rect.right = self.score_rect.right
-        self.level_rect.top = self.score_rect.bottom + 10
+        self.level_rect.top = self.score_rect.top + self.level_rect.height
 
     def prep_ships(self):
         self.ships = Group()
         ship = Ship(self.ai_settings, self.screen)
         ship.rect.x = 10 + 1 * ship.rect.width
-        ship.rect.y = self.screen_rect.top + 5
+        ship.rect.y = self.screen_rect.top + 7
         self.ships.add(ship)
 
 

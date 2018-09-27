@@ -23,13 +23,17 @@ class GameStats():
         self.game_active = False
 
         # High score should never be reset.
-        if(max(ai_settings.scorelist) == None or max(ai_settings.scorelist) == "" or int(max(ai_settings.scorelist))< int(self.score)):
+        self.intscorelist = [int(s) for s in ai_settings.scorelist]
+        print("max score : " + str(max(self.intscorelist)))
+        print("scores: " + str(self.intscorelist))
+        print("players: " + str(ai_settings.playerlist))
+        if(max(self.intscorelist) == None or max(self.intscorelist) == "" or int(max(self.intscorelist)) < int(self.score)):
             self.high_score_player = "You"
             self.high_score = 0
         else:
-            self.high_score = int(max(ai_settings.scorelist))
-            print(ai_settings.scorelist)
-            self.high_index = ai_settings.scorelist.index(str(self.high_score))
+            self.high_score = int(max(self.intscorelist))
+            print(self.intscorelist)
+            self.high_index = self.intscorelist.index(int(self.high_score))
             self.high_score_player = ai_settings.playerlist[self.high_index]
 
     def reset_stats(self):

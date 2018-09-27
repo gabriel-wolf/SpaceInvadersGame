@@ -1,4 +1,5 @@
-Gabe:145
+Fan:100
+Gabe:32870
 John:132
 Mary:133
 Wan:200
